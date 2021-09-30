@@ -1,11 +1,9 @@
 
 from PyQt5 import QtWidgets
 import sys
-import configparser
-
-
 from mainwindow import MainWindow
 from geogenerator import MapGenerator, MapGeneratorError
+from MSApi import MSApi
 
 
 def fatal_error(message):
@@ -14,30 +12,22 @@ def fatal_error(message):
     exit()
 
 
+try:
+    from settings import *
+except ImportError:
+    fatal_error("settings.py not found")
+
+
 if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
 
-    if len(app.arguments()) != 2:
-        fatal_error("Invalid arguments.\nUsage: python3 MapGenerator <settings_file>")
-
-    config_path = app.arguments()[1]
-
     try:
-        open(config_path, 'r')
-    except FileNotFoundError as e:
-        fatal_error(e)
+        MSApi.set_access_token(MOY_SKLAD.TOKEN)
 
-    config = configparser.ConfigParser()
-    config.read(config_path, encoding="utf-8")
+        MapGenerator.set_googlemap_key(GOOGLEMAPS_SETTINGS.AUCH_KEY)
+        MapGenerator.projects_blacklist = MOY_SKLAD.PROJECTS_BLACKLIST
 
-    try:
-        MapGenerator.moy_sklad_login(config['moy_sklad']['login'],
-                                     config['moy_sklad']['password'])
-        MapGenerator.set_googlemap_key(config['googlemaps']['key'])
-        MapGenerator.projects_blacklist = config['moy_sklad']['projects_blacklist'].split(",")
-    except KeyError as e:
-        fatal_error(f"Settings parameter {e} not found")
     except MapGeneratorError as e:
         fatal_error(e)
 
