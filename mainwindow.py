@@ -1,9 +1,12 @@
 from PyQt5 import uic, QtWidgets, QtCore
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 # from PyQt5 import QtGui
 # from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 # from PyQt5.QtCore import QMarginsF
 from geogenerator import MapGenerator, MapGeneratorError
+from ui.ui_mainwindow import Ui_MainWindow
+
 
 class MainWindow(QMainWindow):
 
@@ -12,18 +15,21 @@ class MainWindow(QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        uic.loadUi("mainwindow.ui", self)
+
+        self.ui = Ui_MainWindow()
+
+        self.ui.setupUi(self)
 
         self.map_generator = MapGenerator()
 
-        self.btnGenerate.clicked.connect(self.on_btnGenerateClicked)
+        self.ui.btnGenerate.clicked.connect(self.on_btnGenerateClicked)
 
         self.download_location = QtCore.QStandardPaths.writableLocation(
             QtCore.QStandardPaths.StandardLocation.DownloadLocation)
 
     @QtCore.pyqtSlot()
     def on_btnGenerateClicked(self):
-        date = self.calendarWidget.selectedDate().toPyDate()
+        date = self.ui.calendarWidget.selectedDate().toPyDate()
         try:
             total_count, success_count, geojson = self.map_generator.create_map_for_day(date)
 

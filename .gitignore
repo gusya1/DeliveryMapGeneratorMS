@@ -1,5 +1,9 @@
-
+.*
+ui
+rc
 venv
+dist
+build
 .idea
-settings.ini
 settings.py
+*.spec

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MS Map Genegator</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/icons/mainwindow</normaloff>:/icons/mainwindow</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <property name="leftMargin">
@@ -43,6 +47,9 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
